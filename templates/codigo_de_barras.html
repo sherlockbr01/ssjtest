@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de Barras</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="codigo-de-barras-page">
+    <header>
+        <div class="container">
+            <h1>Sistema de Ponto</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard_usuario_comum') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section class="barcode-section">
+                <h2>Código de Barras do Usuário</h2>
+                <p>Abaixo está o código de barras para o usuário com matrícula: {{ matricula }}</p>
+                <div class="barcode-image">
+                    <img src="{{ url_for('codigo_de_barras', matricula=matricula) }}" alt="Código de Barras">
+                </div>
+                <div class="back-button">
+                    <a href="{{ url_for('dashboard_usuario_comum') }}" class="button">Voltar ao Dashboard</a>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

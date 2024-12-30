@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pontos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset básico para margens e padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Estilo global */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha a interface no topo */
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px; /* Reduz a largura máxima para um design mais compacto */
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column; /* Organiza os itens em coluna */
+            align-items: center; /* Centraliza os itens dentro da caixa */
+        }
+
+        header {
+            text-align: center; /* Centraliza o título */
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #004d99;
+            font-size: 24px;
+        }
+
+        /* Estilos dos campos do formulário */
+        .form-group {
+            width: 100%;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column; /* Alinha o label com o campo em coluna */
+            align-items: center; /* Centraliza os rótulos e campos */
+        }
+
+        /* Adicionando margem para separar o campo de Data das entradas/saídas */
+        .form-group:first-of-type {
+            margin-bottom: 30px; /* Aumenta o espaço abaixo do campo de Data */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center; /* Alinha o texto do rótulo ao centro */
+            width: 100%; /* Garante que o label ocupe toda a largura */
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%; /* Garantindo que os inputs e selects ocupem toda a largura */
+            padding: 10px;
+            border: 2px solid #ccc; /* Borda visível */
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center; /* Alinha o texto dentro do campo */
+            transition: border 0.3s, box-shadow 0.3s; /* Transição suave para borda e sombra */
+        }
+
+        /* Efeito ao focar no campo (quando o usuário clica) */
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #004d99; /* Cor da borda ao focar */
+            box-shadow: 0 0 8px rgba(0, 77, 153, 0.5); /* Sombra suave ao redor */
+            outline: none; /* Remove o contorno padrão do navegador */
+        }
+
+        /* Estilo para os botões */
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px; /* Espaçamento entre os botões */
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .button-salvar,
+        .button-return {
+            flex: 1; /* Cada botão ocupa o mesmo espaço disponível */
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 2px solid transparent; /* Borda inicial transparente */
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .button-salvar {
+            background-color: #004d99;
+            color: white;
+            border: 2px solid #004d99; /* Borda visível para o botão */
+        }
+
+        .button-salvar:hover {
+            background-color: #003366;
+            border-color: #003366; /* Cor da borda ao passar o mouse */
+        }
+
+        .button-return {
+            background-color: #cc3300;
+            color: white;
+            text-decoration: none;
+            border: 2px solid #cc3300; /* Borda visível para o botão */
+        }
+
+        .button-return:hover {
+            background-color: #992600;
+            border-color: #992600; /* Cor da borda ao passar o mouse */
+        }
+
+        /* Estilos para mensagens flash */
+        .flash-message {
+            padding: 15px;
+            margin-top: 20px; /* Distância do botão de salvar */
+            border-radius: 6px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Ocultar a mensagem por padrão */
+        .flash-message.hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Editar Pontos</h1>
+        </header>
+
+        <!-- Formulário de edição de ponto -->
+        <form id="editar-form" action="{{ url_for('editar_pontos', usuario_id=usuario_id) }}" method="POST">
+            <div class="form-group">
+                <label for="data">Data</label>
+                <select id="data" name="data" onchange="atualizarFormulario(this.value, '{{ usuario_id }}')">
+                    {% for data in datas %}
+                    <option value="{{ data[0] }}" {% if loop.first %}selected{% endif %}>{{ data[0] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hora_entrada">Entrada</label>
+                <input type="text" id="hora_entrada" name="hora_entrada" value="{{ ponto.hora_entrada }}">
+            </div>
+            <div class="form-group">
+                <label for="hora_saida">Saída</label>
+                <input type="text" id="hora_saida" name="hora_saida" value="{{ ponto.hora_saida }}">
+            </div>
+            <div class="form-group">
+                <label for="hora_entrada_2">Entrada 2</label>
+                <input type="text" id="hora_entrada_2" name="hora_entrada_2" value="{{ ponto.hora_entrada_2 }}">
+            </div>
+            <div class="form-group">
+                <label for="hora_saida_2">Saída 2</label>
+                <input type="text" id="hora_saida_2" name="hora_saida_2" value="{{ ponto.hora_saida_2 }}">
+            </div>
+
+            <!-- Botões lado a lado (usando flexbox para alinhamento) -->
+            <div class="button-container">
+                <button type="submit" class="button-salvar">Salvar Alterações</button>
+                <a href="{{ url_for('usuarios') }}" class="button-return">Retornar para Usuários</a>
+            </div>
+        </form>
+
+        <!-- Mensagem de sucesso após salvar -->
+        <div id="success-message" class="flash-message success hidden">
+            Ponto Alterado com Sucesso!
+        </div>
+    </div>
+
+    <script>
+        // Função para mostrar a mensagem de sucesso e escondê-la após 5 segundos
+        function showSuccessMessage() {
+            var message = document.getElementById("success-message");
+            message.classList.remove("hidden");  // Exibe a mensagem
+            setTimeout(function() {
+                message.classList.add("hidden");  // Esconde a mensagem após 5 segundos
+            }, 5000);
+        }
+
+        // Exemplo de como disparar a mensagem de sucesso após o envio do formulário
+        document.getElementById("editar-form").onsubmit = function(event) {
+            event.preventDefault();  // Impede o envio real para demonstrar a mensagem
+
+            // Aqui você pode adicionar o código real de envio do formulário via AJAX, se necessário.
+            showSuccessMessage();  // Mostra a mensagem de sucesso após a alteração
+
+            // Após 5 segundos, o formulário pode ser enviado realmente
+            setTimeout(() => {
+                event.target.submit();  // Submete o formulário
+            }, 5000);
+        };
+    </script>
+</body>
+
+</html>

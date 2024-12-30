@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selecionar Período</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .popup-container {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+        .popup-container h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .popup-container input[type="date"] {
+            margin-bottom: 10px;
+            display: block;
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .popup-buttons {
+            display: flex;
+            justify-content: center; /* Centraliza os botões */
+        }
+        .popup-buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 10px; /* Adiciona espaço entre os botões */
+        }
+        .popup-buttons .ok {
+            background-color: green;
+            color: white;
+        }
+        .popup-buttons .ok:hover {
+            background-color: #006400; /* Verde escuro */
+        }
+        .popup-buttons .cancel {
+            background-color: red;
+            color: white;
+        }
+        .popup-buttons .cancel:hover {
+            background-color: #8B0000; /* Vermelho escuro */
+        }
+    </style>
+    <script>
+        function closePopup() {
+            window.close();
+        }
+
+        function submitDates() {
+            var dataInicio = document.getElementById('data_inicio_popup').value;
+            var dataFim = document.getElementById('data_fim_popup').value;
+
+            // Adicionar a lógica para enviar as datas para o servidor ou outro processamento necessário
+
+            closePopup();
+        }
+    </script>
+</head>
+<body>
+    <div class="popup-container">
+        <h3>Selecionar Período</h3>
+        <label for="data_inicio_popup">Data de Início:</label>
+        <input type="date" id="data_inicio_popup" name="data_inicio_popup" placeholder="dd/mm/aaaa">
+        <label for="data_fim_popup">Data de Fim:</label>
+        <input type="date" id="data_fim_popup" name="data_fim_popup" placeholder="dd/mm/aaaa">
+        <!-- Adicionei este parágrafo para espaçamento -->
+        <p><br></p>
+        <div class="popup-buttons">
+            <button type="button" class="ok" onclick="submitDates()">OK</button>
+            <button type="button" class="cancel" onclick="closePopup()">Cancelar</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,506 @@
+/* Estilos Gerais */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7; /* Cor de fundo da página */
+}
+
+.container {
+    width: 95%;
+    margin: 0 auto;
+    max-width: 1400px;
+    text-align: center; /* Centraliza o conteúdo dentro do container */
+}
+
+.container.center-content {
+    display: flex;
+    justify-content: center; /* Centraliza o conteúdo horizontalmente */
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+    min-height: 80vh; /* Garante que o container ocupe a maior parte da altura da viewport */
+}
+
+/* Cabeçalho */
+header {
+    background-color: #004d99; /* Cor de fundo do cabeçalho */
+    color: #fff; /* Cor do texto do cabeçalho */
+    padding: 1em 0;
+    text-align: center; /* Centraliza o texto dentro do cabeçalho */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Mantém o cabeçalho fixo no topo ao rolar a página */
+}
+
+header h1 {
+    margin: 0; /* Remove a margem do título */
+}
+
+nav ul {
+    list-style: none; /* Remove as marcas de lista */
+    padding: 0;
+    margin: 1em 0;
+    text-align: center; /* Centraliza a lista de navegação */
+}
+
+nav ul li {
+    display: inline; /* Exibe os itens de navegação na mesma linha */
+    margin: 0 1em; /* Adiciona espaço entre os itens de navegação */
+}
+
+nav ul li a {
+    color: #fff; /* Cor do texto dos links de navegação */
+    text-decoration: none; /* Remove o sublinhado dos links */
+    font-weight: bold; /* Adiciona negrito ao texto dos links */
+}
+
+/* Botões */
+.button {
+    display: inline-block;
+    padding: 0.5em 0.8em; /* Reduz o padding para diminuir a altura dos botões */
+    background-color: #004d99; /* Cor de fundo dos botões padrão */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em; /* Reduz o tamanho da fonte para diminuir a largura dos botões */
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 1em;
+    margin-right: 0.5em; /* Espaçamento entre os botões */
+    min-width: 80px; /* Reduz a largura mínima dos botões */
+}
+
+.button:hover {
+    background-color: #003366; /* Cor de fundo dos botões ao passar o mouse */
+}
+
+.button-danger {
+    background-color: #e74c3c; /* Cor de fundo dos botões de perigo */
+}
+
+.button-danger:hover {
+    background-color: #c0392b; /* Cor de fundo dos botões de perigo ao passar o mouse */
+}
+
+.button-cd-barras {
+    background-color: #ffa500; /* Cor de fundo para o botão "Cd Barras" */
+}
+
+.button-cd-barras:hover {
+    background-color: #cc8400; /* Cor de fundo ao passar o mouse para o botão "Cd Barras" */
+}
+
+.button-close {
+    background-color: #777; /* Cor de fundo para o botão "Cancelar" */
+}
+
+.button-close:hover {
+    background-color: #555; /* Cor de fundo ao passar o mouse para o botão "Cancelar" */
+}
+
+/* Seções */
+section {
+    background-color: #fff;
+    padding: 2em;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Adiciona sombra às seções */
+    max-width: 800px; /* Aumenta a largura máxima das seções */
+    width: 100%;
+    margin: 2em auto; /* Centraliza as seções verticalmente */
+    text-align: left;
+}
+
+/* Títulos das Seções */
+section h2 {
+    text-align: center;
+    color: #004d99;
+    margin-bottom: 1em;
+    margin-top: -1em; /* Sobe o título da seção */
+}
+
+/* Formulários */
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.8em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.form-group .error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+}
+
+/* Tabelas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5em;
+}
+
+table th,
+table td {
+    padding: 1em;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+table th {
+    background-color: #004d99;
+    color: #fff;
+    width: auto; /* Ajuste automático da largura da coluna */
+}
+
+/* Paginação */
+.pagination {
+    display: flex;
+    justify-content: center; /* Centraliza os botões de paginação */
+    margin: 1em 0;
+}
+
+.pagination button {
+    background-color: #004d99;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    margin: 0 0.5em;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    background-color: #003366;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo escurecido para o modal */
+    text-align: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal img {
+    max-width: 100%;
+    height: auto;
+    margin: 1em 0;
+}
+
+.modal-buttons {
+    text-align: center; /* Centraliza os botões dentro do modal */
+}
+
+.modal-buttons .button {
+    display: inline-block;
+    margin: 0 auto; /* Centraliza o botão de salvar */
+}
+
+/* Rodapé */
+footer {
+    background-color: #004d99;
+    color: #fff;
+    text-align: center;
+    padding: 0.5em 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    opacity: 0.8; /* Deixa o rodapé discreto */
+}
+
+/* Mensagens */
+.messages {
+    margin-top: 1em;
+    text-align: center;
+}
+
+.messages p {
+    color: red; /* Ajuste conforme a categoria da mensagem */
+}
+
+.messages .success {
+    color: green;
+}
+
+.success-message {
+    color: green;
+}
+
+/* Estilos Específicos para Cada Página */
+
+/* Cadastro */
+.cadastro-page .container {
+    text-align: center;
+}
+
+.cadastro-page section {
+    /* Estilos adicionais específicos para a seção de cadastro */
+}
+
+/* Login */
+.login-page .container {
+    text-align: center;
+}
+
+.login-page section {
+    /* Estilos adicionais específicos para a seção de login */
+}
+
+/* Código de Barras */
+.codigo-de-barras-page .container {
+    text-align: center;
+}
+
+.codigo-de-barras-page section {
+    /* Estilos adicionais específicos para a seção de código de barras */
+}
+
+/* Editar Usuário */
+.editar-usuario-page .container {
+    text-align: center;
+}
+
+.editar-usuario-page section {
+    /* Estilos adicionais específicos para a seção de edição de usuário */
+}
+
+/* Dashboard */
+.dashboard-page .container {
+    text-align: center;
+}
+
+.dashboard-page section {
+    /* Estilos adicionais específicos para a seção de dashboard */
+}
+
+/* Usuários */
+.usuarios-page .container {
+    text-align: center;
+}
+
+.usuarios-page section {
+    /* Estilos adicionais específicos para a seção de usuários */
+}
+
+/* Inserir Ponto */
+.inserir-ponto-page .container {
+    text-align: center;
+}
+
+.inserir-ponto-page section {
+    /* Estilos adicionais específicos para a seção de inserção de ponto */
+}
+
+.inserir-ponto-page .form-group {
+    margin-bottom: 1em; /* Ajusta o espaçamento entre os grupos de formulário */
+}
+
+.inserir-ponto-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0; /* Ajusta o espaçamento ao redor da tabela */
+}
+
+.inserir-ponto-page table th,
+.inserir-ponto-page table td {
+    padding: 1em;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.inserir-ponto-page table th {
+    background-color: #004d99;
+    color: #fff;
+}
+
+/* Centralizar conteúdo horizontal e verticalmente */
+.center-content {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh; /* Ocupa a altura total da viewport */
+}
+
+/* Certificar que o conteúdo seja responsivo */
+.container {
+    width: 95%;
+    margin: 0 auto;
+    max-width: 1200px;
+    text-align: center; /* Centraliza o conteúdo dentro do container */
+}
+
+/* Seções para centralização específica */
+section {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 80vh; /* Garante que a seção ocupe a maior parte da altura da viewport */
+    width: 100%;
+    text-align: left;
+    flex-direction: column; /* Alinha os elementos em coluna */
+}
+
+/* Estilos para a página do Dashboard Admin */
+.dashboard-page .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alinha o conteúdo no início, perto do cabeçalho */
+    text-align: center;
+    padding-top: 1em; /* Reduz o espaçamento do topo */
+}
+
+.dashboard-page section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    min-height: 80vh; /* Garante que a seção ocupe a maior parte da altura da viewport */
+}
+
+/* Estilos para o conteúdo maior */
+.dashboard-page .container {
+    font-size: 1.2em; /* Aumenta o tamanho do texto */
+}
+
+.dashboard-page h1,
+.dashboard-page h2,
+.dashboard-page h3 {
+    font-size: 1.5em; /* Aumenta o tamanho dos títulos */
+}
+
+/* Estilos para os botões */
+.dashboard-page .button {
+    padding: 0.7em 1.2em; /* Aumenta o padding dos botões */
+    font-size: 1em; /* Aumenta o tamanho da fonte dos botões */
+}
+
+/* Excluindo o gráfico dos estilos de aumento */
+.dashboard-page .chart-container {
+    font-size: 1em; /* Mantém o tamanho da fonte padrão */
+}
+
+/* Estilos para o conteúdo maior na página Cadastrar Ponto */
+.inserir-ponto-page .container {
+    font-size: 1.2em; /* Aumenta o tamanho do texto */
+}
+
+.inserir-ponto-page h1,
+.inserir-ponto-page h2,
+.inserir-ponto-page h3 {
+    font-size: 1.5em; /* Aumenta o tamanho dos títulos */
+}
+
+/* Estilos para os botões */
+.inserir-ponto-page .button {
+    padding: 0.7em 1.2em; /* Aumenta o padding dos botões */
+    font-size: 1em; /* Aumenta o tamanho da fonte dos botões */
+}
+
+/* Estilos para a tabela */
+.inserir-ponto-page table {
+    font-size: 1em; /* Mantém o tamanho da fonte da tabela padrão */
+    margin-top: 1em; /* Reduz a margem superior da tabela */
+}
+
+/* Reduzindo a margem inferior do título */
+.inserir-ponto-page h2 {
+    margin-bottom: 0.5em; /* Reduz a margem inferior do título */
+}
+
+/* Estilos para os botões de paginação */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza os itens verticalmente */
+    margin: 1em 0;
+}
+
+.pagination button {
+    background-color: #004d99;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.7em 1.2em; /* Aumenta o padding dos botões */
+    margin: 0 0.5em; /* Espaçamento entre os botões */
+    cursor: pointer;
+    font-size: 1em; /* Aumenta o tamanho da fonte */
+}
+
+.pagination button:hover {
+    background-color: #003366;
+}
+
+.pagination .page-indicator {
+    font-size: 1.2em; /* Ajusta o tamanho da fonte do indicador de página */
+    margin: 0 0.5em; /* Espaçamento entre o indicador e os botões */
+}
+
+/* Animações */
+.messages p {
+    font-size: 1em;
+    text-align: center;
+    margin-bottom: 1em;
+    animation: fadeOut 5s forwards; /* Animação de desvanecimento */
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+
+
+

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0">
+    <title>Dashboard do Administrador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #004d99; /* Azul forte */
+            color: white;
+            padding: 10px 0; /* Diminuir o padding para ajustar o cabeçalho */
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .dashboard-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .admin-options {
+            margin-bottom: 20px;
+        }
+        .admin-options a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #004d99; /* Azul forte */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+        .admin-options a:hover {
+            background-color: #003366; /* Tom mais escuro do azul */
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-between; /* Para alinhar os gráficos lado a lado */
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .chart-container {
+            width: 45%; /* Ajusta a largura para caberem lado a lado */
+            height: 300px; /* Tamanho fixo para os gráficos */
+            padding: 10px;
+        }
+        .chart-container canvas {
+            width: 100%; /* Garantir que o canvas ocupe toda a largura do container */
+            height: 100%; /* Ajusta a altura para preencher o container */
+        }
+        h1, h2 {
+            margin: 0;
+        }
+        .chart-container h3 {
+            margin-bottom: 15px; /* Espaço entre o título e o gráfico */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-page">
+    <header>
+        <div class="container">
+            <h1>Sistema de Ponto</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Início</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section class="dashboard-section">
+                <h2>Dashboard do Administrador</h2>
+                <div class="admin-options">
+                    <a href="{{ url_for('cadastrar_ponto') }}" class="button">Inserir Ponto</a>
+                    <a href="{{ url_for('usuarios') }}" class="button">Usuários</a>
+                    <a href="{{ url_for('relatorios') }}" class="button">Relatórios</a>
+                </div>
+                <div class="charts-container">
+                    <div class="chart-container">
+                        <h3>Distribuição de Usuários</h3>
+                        <canvas id="userChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Pontos Inseridos Hoje</h3>
+                        <canvas id="pointsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Gráficos sendo carregados...");
+
+            var ctxUser = document.getElementById('userChart').getContext('2d');
+            var userChart = new Chart(ctxUser, {
+                type: 'pie',
+                data: {
+                    labels: ['Admin', 'Comum', 'Segurança'],
+                    datasets: [{
+                        data: [{{ user_data['admin'] | tojson }}, {{ user_data['comum'] | tojson }}, {{ user_data['seguranca'] | tojson }}],
+                        backgroundColor: ['#004d99', '#009933', '#cc3300']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Permite que o gráfico se ajuste melhor
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Adicionar o novo gráfico para os pontos inseridos hoje
+            var ctxPoints = document.getElementById('pointsChart').getContext('2d');
+            fetch('{{ url_for("contar_pontos_totais") }}')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Dados de pontos inseridos hoje:", data);
+
+                    var pointsChart = new Chart(ctxPoints, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Pontos Inseridos Hoje'],
+                            datasets: [{
+                                label: 'Total de Pontos',
+                                data: [data.totalPontos],
+                                backgroundColor: '#004d99'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return 'Total de Pontos: ' + context.parsed.y;
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Erro ao buscar pontos inseridos hoje:', error));
+        });
+    </script>
+</body>
+</html>

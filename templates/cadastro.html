@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        header {
+            background-color: #004d99;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 90%;
+            max-width: 350px;
+            padding: 10px;
+            margin: 5px auto;
+            border: 3px solid #004d99;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: #003366;
+            outline: none;
+        }
+        .form-group button {
+            width: auto;
+            max-width: 200px;
+            padding: 8px 16px;
+            background-color: #004d99;
+            color: white;
+            border: 3px solid #004d99;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 10px auto;
+            display: block;
+        }
+        .form-group button:hover {
+            background-color: #003366;
+        }
+        .form-group button:focus {
+            outline: none;
+            border-color: #003366;
+        }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+        .success {
+            color: green;
+            font-size: 14px;
+        }
+        #admin-token {
+            display: none;
+        }
+        .form-group a {
+            color: #004d99;
+            text-decoration: none;
+        }
+        .form-group a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Cadastro de Usuário</h1>
+    </header>
+
+    <div class="container">
+        <!-- Definir autocomplete="off" no formulário -->
+        <form method="POST" action="{{ url_for('cadastro') }}" autocomplete="off" id="cadastroForm">
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <!-- Impedindo preenchimento automático no campo -->
+                <input type="text" id="nome" name="nome" value="{{ request.form.get('nome', '') }}" required autocomplete="off">
+                <span id="nome-error" class="error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="matricula">Matrícula:</label>
+                <input type="text" id="matricula" name="matricula" value="{{ request.form.get('matricula', '') }}" required autocomplete="off">
+                <span id="matricula-error" class="error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required autocomplete="new-password">
+                <span id="senha-error" class="error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo" autocomplete="off">
+                    <option value="comum">Comum</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="admin-token" style="display: none;">
+                <label for="token">Token de Administrador:</label>
+                <input type="text" id="token" name="token" autocomplete="off">
+                <span id="token-error" class="error" style="display:none;"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Cadastrar</button>
+            </div>
+        </form>
+
+        <div class="form-group">
+            <p>Já tem uma conta? <a href="{{ url_for('login') }}">Faça login</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Validação em tempo real para o campo "nome"
+        function validateName() {
+            const nome = document.getElementById("nome").value;
+            const nomeArray = nome.trim().split(" ");
+            const regex = /^[A-Z][a-z]*$/;
+            const nomeError = document.getElementById("nome-error");
+
+            nomeError.style.display = "none";
+
+            if (nomeArray.length < 2) {
+                nomeError.textContent = "O nome completo deve conter pelo menos dois nomes.";
+                nomeError.style.display = "block";
+                return false;
+            }
+
+            for (let i = 0; i < nomeArray.length; i++) {
+                if (!regex.test(nomeArray[i])) {
+                    nomeError.textContent = "O nome e sobrenome devem começar com letras maiúsculas.";
+                    nomeError.style.display = "block";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Validação em tempo real para o campo "matricula"
+        function validateMatricula() {
+            const matricula = document.getElementById("matricula").value;
+            const matriculaError = document.getElementById("matricula-error");
+            const regex = /^go\d{4}[a-z]{0,2}$/;  // Expressão regular para validar a matrícula
+
+            matriculaError.style.display = "none";
+
+            if (!regex.test(matricula)) {
+                matriculaError.textContent = "Preencha o campo corretamente.";
+                matriculaError.style.display = "block";
+                return false;
+            }
+
+            return true;
+        }
+
+        // Validação em tempo real para o campo "senha"
+        function validateSenha() {
+            const senha = document.getElementById("senha").value;
+            const senhaError = document.getElementById("senha-error");
+            const regex = /^\d{4,}$/;  // Expressão regular para validar senha com 4 ou mais dígitos
+
+            senhaError.style.display = "none";  // Limpa o erro anterior
+
+            if (!regex.test(senha)) {
+                senhaError.textContent = "A senha deve conter pelo menos 4 dígitos.";
+                senhaError.style.display = "block";
+                return false;
+            }
+
+            return true;
+        }
+
+        // Validação em tempo real para o campo "token" (Token de Administrador)
+        function validateToken() {
+            const token = document.getElementById("token").value;
+            const tokenError = document.getElementById("token-error");
+
+            tokenError.style.display = "none";  // Limpa o erro anterior
+
+            if (token === "") {
+                return true;  // Se o campo estiver vazio, não mostra erro
+            }
+
+            return true;  // Não valida o token até o envio do formulário
+        }
+
+        // Adicionando validação em tempo real
+        document.getElementById("nome").addEventListener("input", function() {
+            validateName();
+        });
+
+        document.getElementById("matricula").addEventListener("input", function() {
+            validateMatricula();
+        });
+
+        document.getElementById("senha").addEventListener("input", function() {
+            validateSenha();
+        });
+
+        document.getElementById("token").addEventListener("input", function() {
+            validateToken();
+        });
+
+        // Função de validação final do formulário
+        function validateForm() {
+            return validateName() && validateMatricula() && validateSenha() && validateToken();  // Verifica nome, matrícula, senha e token
+        }
+
+        // Substitui o método de envio do formulário para validar antes de submeter
+        document.querySelector("#cadastroForm").addEventListener("submit", function(event) {
+            if (!validateForm()) {
+                event.preventDefault();  // Impede o envio do formulário se houver erro
+            }
+        });
+
+        // Exibe o campo de token somente se o tipo for "admin"
+        document.getElementById("tipo").addEventListener("change", function() {
+            const adminTokenField = document.getElementById("admin-token");
+            if (this.value === "admin") {
+                adminTokenField.style.display = "block";
+            } else {
+                adminTokenField.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>

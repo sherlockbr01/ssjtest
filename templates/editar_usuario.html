@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuário</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #004d99; /* Azul forte */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.edit-usuario-section {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Aumenta o espaçamento entre os campos */
+    display: flex;
+    flex-direction: column; /* Garante que a label fique acima do input */
+    align-items: center; /* Centraliza a label e o campo */
+}
+
+label {
+    display: block;
+    margin-bottom: 10px; /* Espaço entre a label e o campo */
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+input[type="text"], input[type="password"], select {
+    width: 60%; /* Diminui a largura das caixas de entrada */
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #888; /* Aumenta a espessura e altera a cor da borda */
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Centraliza o conteúdo dentro dos inputs */
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, select:focus {
+    border-color: #004d99; /* Azul forte no foco */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #004d99;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #003366; /* Tom mais escuro do azul */
+}
+
+    </style>
+</head>
+<body class="edit-usuario-page">
+    <header>
+        <div class="container">
+            <h1>Sistema de Ponto</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard_usuario_admin') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('usuarios') }}">Usuários</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section class="edit-usuario-section">
+                <h2>Editar Usuário</h2>
+                <form action="{{ url_for('editar_usuario', id=usuario[0]) }}" method="post">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome" value="{{ usuario[1] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="matricula">Matrícula:</label>
+                        <input type="text" id="matricula" name="matricula" value="{{ usuario[2] }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha:</label>
+                        <input type="password" id="senha" name="senha" placeholder="Deixe em branco para manter a senha atual">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Tipo:</label>
+                        <select id="tipo" name="tipo">
+                            <option value="comum">Comum</option>
+                            <option value="admin">Admin</option>
+                            <option value="seguranca">Segurança</option>
+                        </select>
+                    </div>
+                    <button type="submit">Salvar Alterações</button>
+                </form>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

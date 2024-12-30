@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar Relatório</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #004d99; /* Azul forte */
+            color: white;
+            padding: 10px 0; /* Diminuir o padding para ajustar o cabeçalho */
+            text-align: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .relatorios-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .form-group-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            flex: 1 1 18%;
+            margin-right: 10px;
+        }
+        .form-group:last-child {
+            margin-right: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input[type="date"]:focus {
+            border-color: #004d99; /* Azul forte */
+        }
+        button.button {
+            padding: 10px 20px;
+            background-color: #004d99; /* Azul forte */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button.button:hover {
+            background-color: #003366; /* Tom mais escuro do azul */
+        }
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mensagem-confirmacao {
+            color: green;
+            background-color: #e0f5e0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+        .mensagem-erro {
+            color: red;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: block;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: white;
+            margin: auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .modal-buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+        }
+        .popup-buttons button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 0 10px;
+        }
+        .popup-buttons .ok {
+            background-color: green;
+            color: white;
+        }
+        .popup-buttons .ok:hover {
+            background-color: #006400;
+        }
+        .popup-buttons .cancel {
+            background-color: red;
+            color: white;
+        }
+        .popup-buttons .cancel:hover {
+            background-color: #8B0000;
+        }
+    </style>
+    <script>
+        function toggleDateFields() {
+            var tipoPeriodo = document.getElementById('tipo_periodo').value;
+            if (tipoPeriodo === 'entre-datas') {
+                document.getElementById('datePopup').style.display = 'block';
+            } else {
+                closePopup();
+                exibirMensagemConfirmacao(tipoPeriodo, null, null);
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('datePopup').style.display = 'none';
+        }
+
+        function submitDates() {
+            var dataInicio = document.getElementById('data_inicio_popup').value;
+            var dataFim = document.getElementById('data_fim_popup').value;
+
+            // Atualiza os campos ocultos para enviar as datas no formulário
+            document.getElementById('data_inicio').value = dataInicio;
+            document.getElementById('data_fim').value = dataFim;
+
+            closePopup();  // Fecha o popup
+            exibirMensagemConfirmacao('entre-datas', dataInicio, dataFim);
+        }
+
+        function exibirMensagemConfirmacao(tipoPeriodo, dataInicio, dataFim) {
+    var mensagem = document.getElementById('mensagem-confirmacao');
+
+    if (tipoPeriodo === 'entre-datas') {
+        // Formatando as datas
+        var dataInicioFormatada = formatDate(dataInicio);
+        var dataFimFormatada = formatDate(dataFim);
+
+        mensagem.innerText = `Período selecionado: ${dataInicioFormatada} a ${dataFimFormatada}`;
+    } else if (tipoPeriodo === 'hoje') {
+        mensagem.innerText = 'Período selecionado: Hoje';
+    } else if (tipoPeriodo === 'semanal') {
+        mensagem.innerText = 'Período selecionado: Esta Semana';
+    } else if (tipoPeriodo === 'mensal') {
+        mensagem.innerText = 'Período selecionado: Este Mês';
+    }
+
+    mensagem.style.display = 'block';
+
+    // Esconder a mensagem após 30 segundos
+    setTimeout(function() {
+        mensagem.style.display = 'none';
+    }, 30000);
+}
+
+function formatDate(data) {
+    var meses = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    var partesData = data.split("-");
+    var ano = partesData[0].slice(2); // Pega os dois últimos dígitos do ano
+    var mes = meses[parseInt(partesData[1], 10) - 1]; // Ajusta o mês, pois a contagem começa em 0
+    var dia = partesData[2];
+
+    return `${dia} ${mes} ${ano}`;
+}
+    </script>
+</head>
+<body class="relatorios-page">
+    <header>
+        <div class="container">
+            <h1>Sistema de Ponto</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('dashboard_usuario_admin') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <section class="relatorios-section">
+                <h2>Gerar Relatório</h2>
+                {% if mensagem_confirmacao %}
+                    <div id="mensagem-confirmacao" class="mensagem-confirmacao" style="display: block;">
+                        {{ mensagem_confirmacao }}
+                    </div>
+                {% elif mensagem_erro %}
+                    <div id="mensagem-erro" class="mensagem-erro" style="display: block;">
+                        {{ mensagem_erro }}
+                    </div>
+                {% else %}
+                    <div id="mensagem-confirmacao" class="mensagem-confirmacao"></div>
+                {% endif %}
+                <form action="{{ url_for('relatorios') }}" method="post">
+                    <div class="form-group-row">
+                        <div class="form-group">
+                            <label for="tipo_relatorio">Tipo de Relatório:</label>
+                            <select id="tipo_relatorio" name="tipo_relatorio" required>
+                                <option value="avancado">Avançado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo_periodo">Período:</label>
+                            <select id="tipo_periodo" name="tipo_periodo" required onchange="toggleDateFields()">
+                                <option value="hoje">Hoje</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="mensal">Mensal</option>
+                                <option value="entre-datas">Entre Datas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="usuario">Usuário:</label>
+                            <select id="usuario" name="usuario" required>
+                                {% for nome, matricula in usuarios %}
+                                    <option value="{{ nome }}">{{ nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="carga_horaria">Carga Horária:</label>
+                            <select id="carga_horaria" name="carga_horaria" required>
+                                <option value="07 Horas">07 Horas</option>
+                                <option value="08 Horas">08 Horas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p><br></p>
+                    <div class="form-group-row center-content">
+                        <button type="submit" class="button">Gerar Relatório</button>
+                    </div>
+
+                    <!-- Campos ocultos para enviar as datas -->
+                    <input type="hidden" id="data_inicio" name="data_inicio">
+                    <input type="hidden" id="data_fim" name="data_fim">
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="datePopup" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Selecione o Período</h2>
+            <label for="data_inicio_popup">Data de Início:</label>
+            <input type="date" id="data_inicio_popup" name="data_inicio_popup" placeholder="dd/mm/aaaa">
+            <label for="data_fim_popup">Data de Fim:</label>
+            <input type="date" id="data_fim_popup" name="data_fim_popup" placeholder="dd/mm/aaaa">
+            <p><br></p>
+            <div class="popup-buttons">
+                <button type="button" class="ok" onclick="submitDates()">OK</button>
+                <button type="button" class="cancel" onclick="closePopup()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
